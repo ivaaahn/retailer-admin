@@ -15,7 +15,7 @@ jobs:
 
       - name: Setuping .env files
         run: |
-          mkdir etc
+          mkdir -p etc
           echo "${{ secrets.APP_CONFIG_ENV }}" > etc/.env.prod
 
       - name: Login to DockerHub

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pprint import pprint
+from typing import Literal
 
 from dotenv import dotenv_values
 from pathlib import Path
@@ -22,7 +23,7 @@ BASE_PROJECT_DIR = BASE_RETAILER_ADMIN_DIR.parent
 
 DEPLOY_MODE = os.environ.get("DEPLOY_MODE", False)
 
-dotenv_files = {
+dotenv_files: dict[Literal["deploy", "test"], Literal[".env.prod", ".env.test"]] = {
     "deploy": ".env.prod",
     "test": ".env.test",
 }
