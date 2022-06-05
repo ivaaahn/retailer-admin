@@ -1,12 +1,16 @@
 FROM python:3.10-slim
 
-WORKDIR /project
+ENV POETRY_VERSION=1.0.0
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install "poetry==$POETRY_VERSION"
+
+WORKDIR /project
+COPY poetry.lock pyproject.toml ./
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-dev --no-interaction
 
 COPY ./retailer_admin .
-COPY ./etc ./etc
+COPY ./etc  ./etc
 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait.sh
 RUN chmod +x /wait.sh && chmod +x ./run.sh

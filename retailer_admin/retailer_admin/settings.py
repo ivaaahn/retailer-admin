@@ -19,22 +19,19 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_RETAILER_ADMIN_DIR = Path(__file__).resolve().parent.parent
-BASE_PROJECT_DIR = BASE_RETAILER_ADMIN_DIR.parent
+BASE_PROD_DIR = BASE_RETAILER_ADMIN_DIR
+BASE_LOCAL_DIR = BASE_RETAILER_ADMIN_DIR.parent
+
+print(BASE_RETAILER_ADMIN_DIR)
 
 DEPLOY_MODE = os.environ.get("DEPLOY_MODE", False)
 
-dotenv_files: dict[Literal["deploy", "test"], Literal[".env.prod", ".env.test"]] = {
-    "deploy": ".env.prod",
-    "test": ".env.test",
-}
-
+path_to_config = f"{BASE_LOCAL_DIR}/etc/.env.test"
 if DEPLOY_MODE:
-    dotenv_file = dotenv_files["deploy"]
-else:
-    dotenv_file = dotenv_files["test"]
+    path_to_config = f"{BASE_PROD_DIR}/etc/.env.prod"
 
 
-config = dotenv_values(f"{BASE_PROJECT_DIR}/etc/{dotenv_file}")
+config = dotenv_values(path_to_config)
 pprint(config)
 
 # Quick-start development settings - unsuitable for production
@@ -165,7 +162,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT = f"{BASE_PROJECT_DIR}/static/"
+STATIC_ROOT = f"{BASE_LOCAL_DIR}/static/"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
 
