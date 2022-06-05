@@ -34,4 +34,5 @@ jobs:
           file: ./deploy/Dockerfile
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/retailer-admin:${{ steps.commit.outputs.short }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/retailer-admin:latest
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/retailer-admin:${{ steps.commit.outputs.short }}
