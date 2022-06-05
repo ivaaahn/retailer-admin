@@ -34,6 +34,7 @@ else:
 
 
 config = dotenv_values(f"{BASE_PROJECT_DIR}/etc/{dotenv_file}")
+pprint(config)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
