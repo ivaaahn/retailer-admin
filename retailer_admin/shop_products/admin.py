@@ -63,11 +63,9 @@ shop.admin_order_field = "shop__pk"
 
 @admin.register(ShopProductModel)
 class ProductAdmin(admin.ModelAdmin):
-    # raw_id_fields = ("shop",)
     list_display = (
         product_name,
         shop,
-        # product_id,
         product_category,
         "price",
         "qty",
