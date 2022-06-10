@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.manager import BaseManager
 from django.utils.translation import gettext_lazy as _
 
 from shop_addresses.models import ShopAddressModel
@@ -15,7 +16,7 @@ class ShopModel(models.Model):
         verbose_name=_("Сотрудники магазина"),
         blank=True,
         help_text=_("Сотрудники данного магазина"),
-        related_name="shop_set",
+        related_name="shops",
         related_query_name="shops",
         through="staff.StaffModel",
     )

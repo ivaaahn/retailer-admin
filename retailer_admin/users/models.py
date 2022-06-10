@@ -49,7 +49,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
 
     id = models.BigAutoField(primary_key=True)
     email = models.EmailField(null=False, unique=True)
-    name = models.CharField(max_length=30, null=True)
+    name = models.CharField(max_length=64, null=True)
     is_active = models.BooleanField(null=False, default=True)
     created_at = models.DateTimeField(null=False, auto_now_add=True)
     birthday = models.DateField(null=True)
@@ -89,7 +89,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     )
 
     def __str__(self):
-        return f"{self.email} ({self.name} / {self.role})"
+        return f"{self.name} ({self.email} / {self.role})"
 
     @property
     def is_staff(self) -> bool:

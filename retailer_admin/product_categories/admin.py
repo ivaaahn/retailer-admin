@@ -13,7 +13,11 @@ class ProductInlineAdmin(admin.TabularInline):
         "description",
         "photo_preview",
     )
-    readonly_fields = ("name", "photo_preview", "description",)
+    readonly_fields = (
+        "name",
+        "photo_preview",
+        "description",
+    )
     can_delete = False
 
     def photo_preview(self, obj):
@@ -21,6 +25,9 @@ class ProductInlineAdmin(admin.TabularInline):
 
     photo_preview.short_description = "Фото продукта"
     photo_preview.allow_tags = True
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("category")
 
 
 @admin.register(ProductCategoryModel)
