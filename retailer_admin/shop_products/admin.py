@@ -3,7 +3,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 
-# Register your models here.
 from products.models import ProductModel
 from shop_products.models import ShopProductModel
 from shops.models import ShopModel
@@ -39,10 +38,6 @@ class ShopProductsFilter(SimpleListFilter):
 
 def product_name(obj):
     return obj.product.name
-
-
-# def product_id(obj):
-#     return obj.product.pk
 
 
 def product_category(obj):
