@@ -22,8 +22,6 @@ BASE_RETAILER_ADMIN_DIR = Path(__file__).resolve().parent.parent
 BASE_PROD_DIR = BASE_RETAILER_ADMIN_DIR
 BASE_LOCAL_DIR = BASE_RETAILER_ADMIN_DIR.parent
 
-print(BASE_RETAILER_ADMIN_DIR)
-
 DEPLOY_MODE = os.environ.get("DEPLOY_MODE", False)
 
 path_to_config = f"{BASE_LOCAL_DIR}/etc/.env.test"
