@@ -13,13 +13,17 @@ class UserAddressModel(models.Model):
         blank=False,
         null=False,
     )
-    city = models.TextField(verbose_name="Город", null=False, blank=False)
-    street = models.TextField(verbose_name="Улица", null=False, blank=False)
-    house = models.TextField(verbose_name="Дом", null=False, blank=False)
+    city = models.CharField(
+        verbose_name="Город", null=False, blank=False, max_length=32
+    )
+    street = models.CharField(
+        verbose_name="Улица", null=False, blank=False, max_length=32
+    )
+    house = models.CharField(verbose_name="Дом", null=False, blank=False, max_length=32)
     entrance = models.IntegerField(verbose_name="Подъезд", null=False, blank=False)
     floor = models.IntegerField(verbose_name="Этаж", null=True, blank=True)
     flat = models.CharField(
-        verbose_name="Квартира", null=True, blank=True, max_length=6
+        verbose_name="Квартира", null=True, blank=True, max_length=32
     )
 
     def __str__(self):

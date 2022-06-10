@@ -16,7 +16,7 @@ class ShopModel(models.Model):
         verbose_name=_("Сотрудники магазина"),
         blank=True,
         help_text=_("Сотрудники данного магазина"),
-        related_name="shop_set",
+        related_name="shops",
         related_query_name="shops",
         through="staff.StaffModel",
     )

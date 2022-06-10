@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 
 from order.models import OrderModel
 from shops.models import ShopModel
+from user_addresses.models import UserAddressModel
 
 UserModel = get_user_model()
 
@@ -17,12 +18,18 @@ class ShopInlineAdmin(admin.TabularInline):
     verbose_name = "Магазин"
     verbose_name_plural = "Магазины"
     extra = 0
+    raw_id_fields = ("shop",)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "shop":
             kwargs["queryset"] = ShopModel.objects.select_related("address").all()
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class AddressInlineAdmin(admin.StackedInline):
+    model = UserAddressModel
+    extra = 0
 
 
 class OrderInlineAdmin(admin.StackedInline):
@@ -47,9 +54,6 @@ class OrderInlineAdmin(admin.StackedInline):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "shop":
             kwargs["queryset"] = ShopModel.objects.select_related("address").all()
-
-        # if db_field.name == "address":
-        #     kwargs["queryset"] = U.objects.select_related("address").all()
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -144,6 +148,7 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     inlines = (
+        AddressInlineAdmin,
         ShopInlineAdmin,
         GroupInlineAdmin,
         OrderInlineAdmin,
@@ -185,7 +190,7 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     search_fields = ("email", "name")
-    ordering = ("email",)
+    ordering = ("name", "email")
     filter_horizontal = ()
 
 
