@@ -41,7 +41,6 @@ class OrderInlineAdmin(admin.StackedInline):
     verbose_name_plural = "Заказы"
     extra = 0
     can_delete = False
-    # raw_id_fields = ("shop", "address")
 
     def get_queryset(self, request):
         return (
