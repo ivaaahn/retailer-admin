@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 
 # Register your models here.
+from products.models import ProductModel
 from shop_products.models import ShopProductModel
 from shops.models import ShopModel
 
@@ -62,6 +63,7 @@ shop.admin_order_field = "shop__pk"
 
 @admin.register(ShopProductModel)
 class ProductAdmin(admin.ModelAdmin):
+    # raw_id_fields = ("shop",)
     list_display = (
         product_name,
         shop,
@@ -77,24 +79,28 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        qs = (
+            super()
+            .get_queryset(request)
+            .select_related("shop", "product", "shop__address", "product__category")
+        )
         if not request.user.is_superuser:
             qs = qs.filter(shop__in=request.user.shop_set.all())
         return qs
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if not request.user.is_superuser and db_field.name == "shop":
-            kwargs["queryset"] = ShopModel.objects.filter(
-                pk__in=request.user.shop_set.all()
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "shop":
+            qs = ShopModel.objects.select_related("address").all()
 
-    # def get_form(self, request, obj=None, change=False, **kwargs):
-    #     form = super(ProductAdmin, self).get_form(request, obj, **kwargs)
-    #     form.base_fields["shop"] = forms.ModelChoiceField(
-    #         queryset=ShopModel.objects.filter(pk__in=request.user.shop_set.all())
-    #     )
-    #     return form
+            if not request.user.is_superuser:
+                qs.filter(pk__in=request.user.all())
+
+            kwargs["queryset"] = qs
+
+        if db_field.name == "product":
+            kwargs["queryset"] = ProductModel.objects.select_related("category").all()
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     @staticmethod
     def _make_shop_product_key(product_id: int, shop_id: int) -> str:

@@ -19,6 +19,8 @@ class ProductAdmin(admin.ModelAdmin):
         "photo_preview",
     )
 
+    search_fields = ("name",)
+
     readonly_fields = ("photo_preview",)
 
     def photo_preview(self, obj):

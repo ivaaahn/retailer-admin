@@ -6,6 +6,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
+from order.models import OrderModel
 from shops.models import ShopModel
 
 UserModel = get_user_model()
@@ -15,6 +16,42 @@ class ShopInlineAdmin(admin.TabularInline):
     model = ShopModel.staff.through
     verbose_name = "Магазин"
     verbose_name_plural = "Магазины"
+    extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "shop":
+            kwargs["queryset"] = ShopModel.objects.select_related("address").all()
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class OrderInlineAdmin(admin.StackedInline):
+    model = OrderModel
+    readonly_fields = ("total_price", "created_at", "receive_kind", "status")
+    fields = ("total_price", "created_at", "receive_kind", "status")
+    show_change_link = True
+    verbose_name = "Заказ"
+    verbose_name_plural = "Заказы"
+    extra = 0
+    can_delete = False
+    # raw_id_fields = ("shop", "address")
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("user", "shop", "address")
+            .prefetch_related("products")
+        )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "shop":
+            kwargs["queryset"] = ShopModel.objects.select_related("address").all()
+
+        # if db_field.name == "address":
+        #     kwargs["queryset"] = U.objects.select_related("address").all()
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class UserCreationForm(forms.ModelForm):
@@ -67,6 +104,7 @@ class GroupInlineAdmin(admin.TabularInline):
     model = UserModel.groups.through
     verbose_name = "Группа пользователя"
     verbose_name_plural = "Группы пользователя"
+    extra = 0
 
 
 class UserAdmin(BaseUserAdmin):
@@ -108,6 +146,7 @@ class UserAdmin(BaseUserAdmin):
     inlines = (
         ShopInlineAdmin,
         GroupInlineAdmin,
+        OrderInlineAdmin,
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -145,7 +184,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    search_fields = ("email",)
+    search_fields = ("email", "name")
     ordering = ("email",)
     filter_horizontal = ()
 
