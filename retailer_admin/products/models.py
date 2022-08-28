@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.manager import BaseManager
 from django.utils.safestring import mark_safe
 
 from product_categories.models import ProductCategoryModel

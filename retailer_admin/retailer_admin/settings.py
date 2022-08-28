@@ -41,13 +41,12 @@ SECRET_KEY = config["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config["DEBUG"]
 
-ALLOWED_HOSTS = ["0.0.0.0", "localhost", "51.250.86.153"]
+ALLOWED_HOSTS = ["0.0.0.0", "localhost"]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://51.250.86.153",
     "http://127.0.0.1",
-    "https://retailer.gq",
-    "https://www.retailer.gq",
+    "https://retailerx.gq",
+    "https://www.retailerx.gq",
 ]
 
 STATICFILES_FINDERS = [
