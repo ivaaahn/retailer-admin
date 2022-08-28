@@ -5,14 +5,13 @@ from django.db import migrations
 
 def create_groups(apps, schema_editor):
     db_alias = schema_editor.connection.alias
-    print(db_alias)
     emit_post_migrate_signal(2, False, db_alias)
     Group = apps.get_model("auth", "Group")
     Permission = apps.get_model("auth", "Permission")
 
     view_product = Permission.objects.using(db_alias).get(codename="view_productmodel")
     view_shop = Permission.objects.using(db_alias).get(codename="view_shopmodel")
-    view_product_category = Permission.objects.get(codename="view_productcategorymodel")
+    view_product_category = Permission.objects.using(db_alias).get(codename="view_productcategorymodel")
 
     view_shop_product = Permission.objects.using(db_alias).get(codename="view_shopproductmodel")
     add_shop_product = Permission.objects.using(db_alias).get(codename="add_shopproductmodel")
@@ -30,8 +29,9 @@ def create_groups(apps, schema_editor):
     ]
 
     staff = Group(name="staff")
-    staff.permissions.set(staff_permissions)
     staff.save(using=db_alias)
+
+    staff.permissions.set(staff_permissions)
 
 
 def revert_migration(apps, schema_editor):
