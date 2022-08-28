@@ -5,8 +5,8 @@ from django.db import migrations
 
 def create_groups(apps, schema_editor):
     db_alias = schema_editor.connection.alias
-    emit_post_migrate_signal(2, False, db_alias)
     print(db_alias)
+    emit_post_migrate_signal(2, False, db_alias)
     Group = apps.get_model("auth", "Group")
     Permission = apps.get_model("auth", "Permission")
 
