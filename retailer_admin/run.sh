@@ -1,6 +1,10 @@
 #!/bin/sh
 
+echo "<<< MIGRATIONS >>>"
 python manage.py migrate --database=migrations
-sleep 15
+
+echo "<<< CREATING SUPERUSER >>>"
 python manage.py createsuperuser --noinput
-uvicorn retailer_admin.asgi:application "--proxy-headers" --host '0.0.0.0' --port '8000' --reload
+
+echo "<<< STARTING >>>"
+uvicorn retailer_admin.asgi:application "--proxy-headers" --host '0.0.0.0' --port '8000'
