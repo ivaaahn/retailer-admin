@@ -71,6 +71,8 @@ class ProductAdmin(admin.ModelAdmin):
         ShopProductsFilter,
     )
 
+    readonly_fields = ("shop", "product",)
+
     def get_queryset(self, request):
         qs = (
             super()
