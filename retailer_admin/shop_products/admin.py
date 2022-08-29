@@ -86,7 +86,7 @@ class ProductAdmin(admin.ModelAdmin):
             qs = ShopModel.objects.select_related("address").all()
 
             if not request.user.is_superuser:
-                qs.filter(pk__in=request.user.all())
+                qs.filter(pk__in=request.user.shop_set.all())
 
             kwargs["queryset"] = qs
 
