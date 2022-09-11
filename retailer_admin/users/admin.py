@@ -29,6 +29,7 @@ class ShopInlineAdmin(admin.TabularInline):
 
 class AddressInlineAdmin(admin.StackedInline):
     model = UserAddressModel
+    readonly_fields = ("city", "street", "house", "entrance", "floor", "flat",)
     extra = 0
 
 
